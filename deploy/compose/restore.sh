@@ -13,5 +13,5 @@ docker run --rm $R2 -v /tmp/restore:/r rclone/rclone:1.75.1 copyto r2:$BUCKET_NA
 
 docker compose up -d --wait db
 docker compose exec -T db pg_restore -U bench -d bench --clean --if-exists < /tmp/restore/$LATEST
-docker compose restart api
+docker compose up -d --wait api
 echo "restored $LATEST"
