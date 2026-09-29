@@ -1,0 +1,7 @@
+app-compose.bench.nbch-tech.com {
+	reverse_proxy web:80
+}
+
+api-compose.bench.nbch-tech.com {
+	reverse_proxy api:8000
+}

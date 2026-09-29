@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Merge Log bench app</title>
+  <style>
+    body { margin: 0; background: #0B0F14; color: #E6EDF3; font: 18px/1.5 system-ui, sans-serif; }
+    main { max-width: 640px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; margin: 0 0 4px; }
+    .accent { color: #E8792F; }
+    .muted { color: #8B949E; }
+    li { padding: 6px 0; border-bottom: 1px solid #1F2630; list-style: none; }
+    ul { padding: 0; }
+    .err { color: #F85149; }
+  </style>
+  <script src="/config.js"></script>
+</head>
+<body>
+<main>
+  <h1>Bench app <span class="accent" id="platform"></span></h1>
+  <p class="muted">API <span id="api"></span> · version <strong id="version">…</strong></p>
+  <ul id="notes"></ul>
+</main>
+<script>
+  document.getElementById("platform").textContent = "· " + window.BENCH.platform;
+  document.getElementById("api").textContent = window.BENCH.api;
+  fetch(window.BENCH.api + "/api/notes")
+    .then(r => { if (!r.ok) throw new Error("API " + r.status); return r.json(); })
+    .then(d => {
+      document.getElementById("version").textContent = d.version;
+      document.getElementById("notes").innerHTML =
+        d.notes.map(n => `<li>#${n.id} ${n.body} <span class="muted">${n.at.slice(0, 19)}</span></li>`).join("");
+    })
+    .catch(e => { const v = document.getElementById("version"); v.textContent = e.message; v.className = "err"; });
+</script>
+</body>
+</html>
