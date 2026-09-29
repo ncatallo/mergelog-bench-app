@@ -9,10 +9,10 @@ mkdir -p /opt/bench/backups
 
 docker compose exec -T db pg_dump -U bench -Fc bench > /opt/bench/backups/$FILE
 
-docker run --rm -v /opt/bench/backups:/b \
+docker run --rm --quiet -v /opt/bench/backups:/b \
   -e RCLONE_CONFIG_R2_TYPE=s3 -e RCLONE_CONFIG_R2_PROVIDER=Cloudflare \
   -e RCLONE_CONFIG_R2_ACCESS_KEY_ID="$ACCESS_KEY" -e RCLONE_CONFIG_R2_SECRET_ACCESS_KEY="$SECRET_KEY" \
-  -e RCLONE_CONFIG_R2_ENDPOINT="$ENDPOINT" \
+  -e RCLONE_CONFIG_R2_ENDPOINT="$ENDPOINT" -e RCLONE_CONFIG_R2_NO_CHECK_BUCKET=true \
   rclone/rclone:1.75.1 copyto /b/$FILE r2:$BUCKET_NAME/compose/$FILE
 
 find /opt/bench/backups -name '*.dump' -mtime +7 -delete   # local retention: 7 days
