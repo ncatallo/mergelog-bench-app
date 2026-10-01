@@ -2,5 +2,5 @@
 # setting BROKEN simulates a bad release on purpose (said on screen):
 #   "boot"   -> the API crashes while starting
 #   "health" -> the API starts, but /health answers 500
-VERSION = "v30"
-BROKEN = None
+VERSION = "v31"
+BROKEN = 'health'
